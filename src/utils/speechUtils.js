@@ -1,40 +1,79 @@
-let utterance;
-let isPaused = false;
+// src/utils/speechUtils.js
 
-function getVoices() {
-  return new Promise((resolve) => {
-    const v = window.speechSynthesis.getVoices();
-    if (v.length) return resolve(v);
-    window.speechSynthesis.onvoiceschanged = () => resolve(window.speechSynthesis.getVoices());
+let utterance, audio, isPaused = false;
+
+// Env
+const ELEVEN_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
+const VOICE_MAP = {
+  Narrator: import.meta.env.VITE_VOICE_NARRATOR_ID,
+  Mother:   import.meta.env.VITE_VOICE_MOTHER_ID,
+  Father:   import.meta.env.VITE_VOICE_FATHER_ID,
+  Son:      import.meta.env.VITE_VOICE_SON_ID,
+  Daughter: import.meta.env.VITE_VOICE_DAUGHTER_ID,
+  Uncle:    import.meta.env.VITE_VOICE_UNCLE_ID,
+  Aunt:     import.meta.env.VITE_VOICE_AUNT_ID,
+};
+
+async function elevenSpeak(text, voiceId) {
+  const res = await fetch(
+    `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "xi-api-key": ELEVEN_KEY,
+      },
+      body: JSON.stringify({ text, model_id: "eleven_monolingual_v1" }),
+    }
+  );
+  if (!res.ok) throw new Error(await res.text());
+  const blob = await res.blob();
+  return new Promise((resolve, reject) => {
+    audio = new Audio(URL.createObjectURL(blob));
+    audio.onended = resolve;
+    audio.onerror = reject;
+    audio.play();
   });
 }
 
-export async function speakText(segments) {
-  if (!Array.isArray(segments) || segments.length === 0) return;
+export async function speakText(text, role = "Narrator") {
+  if (!text) return;
+  const cleaned = text.replace(/\([^)]+\)/g, "").trim();
+  if (!cleaned) return;
 
-  const voices = await getVoices();
-  const defaultVoice = voices.find(v => v.name.includes("Google US English")) || voices[0];
-  const fullText = segments.map(seg => seg.text.replace(/\([^)]+\)/g, "").trim()).join(" ");
-  utterance = new SpeechSynthesisUtterance(fullText);
-  utterance.voice = defaultVoice;
-  utterance.rate = 1; utterance.pitch = 1; utterance.volume = 1;
-  isPaused = false;
+  const voiceId = VOICE_MAP[role] || VOICE_MAP.Narrator;
+  if (ELEVEN_KEY && voiceId) {
+    try {
+      await elevenSpeak(cleaned, voiceId);
+      return;
+    } catch (e) {
+      console.warn("ElevenLabs failed, falling back:", e);
+    }
+  }
+
+  // Browser fallback
+  utterance = new SpeechSynthesisUtterance(cleaned);
+  utterance.rate = 1;
+  utterance.pitch = 1;
   window.speechSynthesis.cancel();
   window.speechSynthesis.speak(utterance);
-  utterance.onend = () => { utterance = null; };
-  utterance.onerror = e => console.error("TTS error:", e);
+  return new Promise((r) => (utterance.onend = r));
 }
 
 export function pauseSpeech() {
-  if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-    window.speechSynthesis.pause(); isPaused = true;
-  }
+  if (audio && !audio.paused) audio.pause(), (isPaused = true);
+  else if (speechSynthesis.speaking && !speechSynthesis.paused)
+    speechSynthesis.pause(), (isPaused = true);
 }
 
 export function resumeSpeech() {
-  if (isPaused) { window.speechSynthesis.resume(); isPaused = false; }
+  if (audio && audio.paused) audio.play(), (isPaused = false);
+  else if (isPaused) speechSynthesis.resume(), (isPaused = false);
 }
 
-export function stopSpeech() {
-  window.speechSynthesis.cancel(); isPaused = false; utterance = null;
+export function stopSpeech(setIsPlaying) {
+  if (audio) audio.pause(), (audio = null);
+  window.speechSynthesis.cancel();
+  isPaused = false;
+  if (typeof setIsPlaying === "function") setIsPlaying(false);
 }

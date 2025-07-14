@@ -2,4 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-body { @apply bg-white text-gray-900; }
+html, body {
+  @apply bg-cover bg-no-repeat bg-center min-h-screen;
+  background-image: url('/night-bg.png');
+  background-color: #0d1b2a;
+  color: white;
+}
