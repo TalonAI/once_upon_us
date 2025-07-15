@@ -46,32 +46,24 @@ export default function FamilyForm({
 
       <button onClick={addMember} className="text-blue-600 mb-4">+ Add Family Member</button>
 
-		<h2 className="text-xl font-semibold mb-2">Story Settings</h2>
-		<div className="flex gap-2 mb-2">
-		  <select
-			value={storyType}
-			onChange={(e) => setStoryType(e.target.value)}
-			className="border px-2 py-1 rounded text-black"
-		  >
-			<option value="Adventure">Adventure</option>
-			<option value="Mystery">Mystery</option>
-			<option value="Horror">Horror</option>
-			<option value="Futuristic">Futuristic</option>
-			<option value="Family Vacation">Family Vacation</option>
-		  </select>
-
-		  <select value={length} onChange={e => setLength(e.target.value)} className="border px-2 py-1 rounded text-black">
-			<option value="short">2 Minutes</option>
-			<option value="medium">5 Minutes</option>
-			<option value="long">10 Minutes</option>
-		  </select>
-
-		  <select value={timePeriod} onChange={e => setTimePeriod(e.target.value)} className="border px-2 py-1 rounded text-black">
-			<option value="current">Present Day</option>
-			<option value="past">Past</option>
-			<option value="future">Future</option>
-		  </select>
-		</div>
+      <h2 className="text-xl font-semibold mb-2">Story Settings</h2>
+      <div className="flex gap-2 mb-2">
+        <select value={storyType} onChange={e => setStoryType(e.target.value)} className="border px-2 py-1 rounded text-black">
+          <option>Adventure</option>
+          <option>Fantasy</option>
+          <option>Space</option>
+        </select>
+        <select value={length} onChange={e => setLength(e.target.value)} className="border px-2 py-1 rounded text-black">
+          <option value="short">2 Minutes</option>
+          <option value="medium">5 Minutes</option>
+          <option value="long">10 Minutes</option>
+        </select>
+        <select value={timePeriod} onChange={e => setTimePeriod(e.target.value)} className="border px-2 py-1 rounded text-black">
+          <option value="current">Present Day</option>
+          <option value="past">Past</option>
+          <option value="future">Future</option>
+        </select>
+      </div>
       <textarea
         placeholder="Optional: seed idea..."
         value={context}
