@@ -1,4 +1,4 @@
-// StoryViewer.jsx
+
 import React, { useState, useRef, useEffect } from 'react';
 import { speakWithVoice } from '../utils/elevenlabs';
 import { roleVoices } from '../utils/roleVoices';
@@ -40,7 +40,11 @@ const StoryViewer = ({ story }) => {
       }}
     >
       <div className="flex gap-4 mb-4">
-        <button onClick={playStory} disabled={!story || story.length === 0 || isPlaying}>
+        <button
+          onClick={playStory}
+          disabled={!story || story.length === 0 || isPlaying}
+          className="bg-blue-500 text-white px-6 py-3 text-lg font-semibold rounded shadow"
+        >
           ▶️ Play
         </button>
       </div>
