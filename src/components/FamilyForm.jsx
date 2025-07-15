@@ -44,7 +44,7 @@ export default function FamilyForm({
         </div>
       ))}
 
-      <button onClick={addMember} className="text-blue-600 mb-4">+ Add Family Member</button>
+      <button onClick={addMember} className="text-white font-semibold text-base mb-4">+ Add Family Member</button>
 
       <h2 className="text-xl font-semibold mb-2">Story Settings</h2>
       <div className="flex gap-2 mb-2">

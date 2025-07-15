@@ -52,7 +52,6 @@ function App() {
       <div className="absolute top-20 left-1/2 w-1 h-1 bg-white rounded-full opacity-60"></div>
       <div className="absolute top-32 right-1/3 w-1.5 h-1.5 bg-white rounded-full opacity-75"></div>
       {/* Moon */}
-      <div className="absolute top-12 left-12 w-16 h-16 bg-yellow-300 rounded-full shadow-lg opacity-70"></div>
 
       {/* Main App Content */}
       <div className="relative z-10 p-8 max-w-3xl mx-auto">
@@ -60,7 +59,9 @@ function App() {
           Once Upon Us
         </h1>
         <p className="text-center text-gray-300 mb-8">
+        <p className="text-center text-black text-lg font-medium mb-8">
           Create a voice-narrated story starring your own family
+        </p>
         </p>
 
         <FamilyForm
