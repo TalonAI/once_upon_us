@@ -1,3 +1,4 @@
+
 import React from "react";
 
 const ROLES = ["Mother", "Father", "Son", "Daughter", "Uncle", "Aunt"];
@@ -44,14 +45,15 @@ export default function FamilyForm({
         </div>
       ))}
 
-      <button onClick={addMember} className="text-blue-600 mb-4">+ Add Family Member</button>
+      <button onClick={addMember} className="text-white font-semibold text-base mb-4">+ Add Family Member</button>
 
       <h2 className="text-xl font-semibold mb-2">Story Settings</h2>
       <div className="flex gap-2 mb-2">
         <select value={storyType} onChange={e => setStoryType(e.target.value)} className="border px-2 py-1 rounded text-black">
           <option>Adventure</option>
-          <option>Fantasy</option>
-          <option>Space</option>
+          <option>Mystery</option>
+          <option>Horror</option>
+          <option>Futuristic</option>
         </select>
         <select value={length} onChange={e => setLength(e.target.value)} className="border px-2 py-1 rounded text-black">
           <option value="short">2 Minutes</option>
